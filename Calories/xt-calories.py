@@ -74,7 +74,7 @@ with cc2:
         plt.ylabel('Caloris',labelpad= 30)
         plt.xticks(rotation=45,ha='right',fontsize=20)
         plt.yticks(fontsize=20)
-        plt.legend(loc='upper right')
+        # plt.legend(loc='upper right')
         st.set_option('deprecation.showPyplotGlobalUse', False)
 
     st.pyplot(plt)
@@ -100,7 +100,7 @@ def pltdata_func(data,index):
     plt.ylabel('Kcal per 100g',fontsize=20,labelpad= 30)
     plt.xticks(rotation=45,fontsize=16,ha='right')
     plt.yticks(fontsize=16)
-    plt.legend(loc='upper right')
+    # plt.legend(loc='upper right')
     return plt
 
 st.pyplot(pltdata_func(plt_data,food_selected),width=700,height=300)
