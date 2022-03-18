@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from PIL import Image
 from wordcloud import WordCloud,STOPWORDS
-imoprt os
+import os
 print(os.getcwd())
 
 #---------------------------------#
