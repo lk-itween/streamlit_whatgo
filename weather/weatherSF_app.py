@@ -79,6 +79,7 @@ def load_data():
     date_value = pd.date_range(today, today + timedelta(days =14)).date
     date_dict ={f'{i.day:02}':i for i in date_value}
     df['date'] = df['date'].map(date_dict)
+    df.dropna(subset=['date'], inplace=True)
     
     return df
 
@@ -91,7 +92,7 @@ col2.subheader('Selected Date')
 date_unique= df['date'].unique()
 selected_date = col1.multiselect('Selected Date', date_unique, date_unique)
 
-df_selected_date = df[ (df['date'].isin(selected_date)) ] 
+df_selected_date = df[(df['date'].isin(selected_date)) ] 
 
 col2.dataframe(df_selected_date)
 
