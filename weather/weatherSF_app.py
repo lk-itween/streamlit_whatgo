@@ -120,7 +120,8 @@ def day_night_line(data, date):
     plt.figure(figsize=(10,6))
     plt.subplots_adjust(top = 1, bottom = 0)
     df_selected_date2.plot(kind='line')
-    plt.xticks(df_selected_date2.index,rotation=45,ha='right')
+    xticks_ = df_selected_date2.index.astype(str)
+    plt.xticks(xticks_, rotation=45, ha='right')
     plt.ylabel('Temp(°F)')
     plt.legend(loc='upper right')
     return plt
