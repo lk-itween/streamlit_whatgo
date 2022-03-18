@@ -4,7 +4,7 @@ import base64
 import matplotlib.pyplot as plt
 import requests
 from bs4 import BeautifulSoup
-import datetime import datetime, timedelta
+from datetime import datetime, timedelta
 # from PIL import Image
 from wordcloud import WordCloud,STOPWORDS
 
