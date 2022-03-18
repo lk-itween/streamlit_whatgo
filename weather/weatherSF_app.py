@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
-# from PIL import Image
+from PIL import Image
 from wordcloud import WordCloud,STOPWORDS
 
 #---------------------------------#
