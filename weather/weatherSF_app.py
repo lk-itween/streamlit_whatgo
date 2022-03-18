@@ -18,6 +18,8 @@ st.set_page_config(layout="wide")
 #---------------------------------#
 # Title
 
+# 找到你部署streamlit上的父路径，我的路径是streamlit_whatgo，所以数据文件要从这个文件下面找
+# sf.jpg图片文件保存在data/sf.jpg下，结合父路径即为./weather/data/sf.jpg
 img = Image.open('./weather/data/sf.jpg')
 
 st.image(img, width=700)
@@ -69,6 +71,7 @@ def load_data():
         precip = precip_find.text if precip_find else '0%'
         wind = daypart.find('span', {'data-testid': 'Wind'}).text
         humidity = humiditysection.find('span', {'data-testid': 'PercentageValue'}).text
+        # 这一处会有警告报出，可暂时不管，或者在代码中import warnings
         data = data.append(pd.Series([date, day, time, weather, humidity, precip, temp, wind], name=num, index=columns))
         df= data  
     
@@ -80,6 +83,7 @@ def load_data():
     date_value = pd.date_range(today, today + timedelta(days =14)).date
     date_dict ={f'{i.day:02}':i for i in date_value}
     df['date'] = df['date'].map(date_dict)
+    # 日期转换会出现date列中出现nan，为float类型，不能与datetime比较，会影响plt作图，综合考虑删除该行
     df.dropna(subset=['date'], inplace=True)
     
     return df
@@ -122,6 +126,7 @@ def day_night_line(data, date):
     plt.figure(figsize=(10,6))
     plt.subplots_adjust(top = 1, bottom = 0)
     df_selected_date2.plot(kind='line')
+    # 日期在plt作图中，会自动填充中间日期值，这里将日期转换为string类型，图中会出现空白格
     xticks_ = df_selected_date2.index.astype(str)
     plt.xticks(xticks_, rotation=45, ha='right')
     plt.ylabel('Temp(°F)')
