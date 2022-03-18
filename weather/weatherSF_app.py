@@ -15,9 +15,9 @@ st.set_page_config(layout="wide")
 #---------------------------------#
 # Title
 
-# image = Image.open('sf-.jpg')
+img = Image.open('./data/sf.jpg')
 
-st.image('./data/sf-.jpg', width=700)
+st.image(img, width=700)
 
 st.title('San Francisco 15-Day Weather Forecast App')
 st.markdown("""
