@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from PIL import Image
 from wordcloud import WordCloud,STOPWORDS
+imoprt os
+print(os.getcwd())
 
 #---------------------------------#
 # Page layout
@@ -15,7 +17,7 @@ st.set_page_config(layout="wide")
 #---------------------------------#
 # Title
 
-img = Image.open('./data/sf.jpg')
+img = Image.open('./weather/data/sf.jpg')
 
 st.image(img, width=700)
 
