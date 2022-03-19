@@ -21,14 +21,13 @@ This app shows the main food's caloris and you can create your own low-caloris r
 # ---------------------------------#
 
 
-@st.cache
+# @st.cache
 def get_session_id():
     ctx = get_script_run_ctx()
     if ctx is None:
         raise Exception("Failed to get the thread context")
 
     return ctx.session_id
-
 
 user_session_id = get_session_id()
 
@@ -156,7 +155,7 @@ def main():
             st.subheader('view Recipe table')
             result = view_all_data(user_session_id)
             clean_df = pd.DataFrame(result, columns=['Session_ID', 'Ingredients', ' Amount_of_Ingredients', 'Units', 'Note'])
-            clean_df.drop('Session_ID', axis=1, inplace=True)
+            # clean_df.drop('Session_ID', axis=1, inplace=True)
             st.dataframe(clean_df)
 
             # delete and update recipt table
