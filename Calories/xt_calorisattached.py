@@ -9,7 +9,7 @@ def create_table():
 
 
 def add_data(session_id, ingredient,amount,units,note):
-	c.execute('INSERT INTO t_caloriss(Session_ID, Ingredients, Amount_of_Ingredients, Units, Note) VALUES (?,?,?,?)',(session_id, ingredient,amount,units,note))
+	c.execute('INSERT INTO t_caloriss(Session_ID, Ingredients, Amount_of_Ingredients, Units, Note) VALUES (?,?,?,?,?)',(session_id, ingredient,amount,units,note))
 	conn.commit()
 
 
