@@ -155,7 +155,8 @@ def main():
         with st.expander("View and Edit Recipe table"):
             st.subheader('view Recipe table')
             result = view_all_data(user_session_id)
-            clean_df = pd.DataFrame(result, columns=['Ingredients', ' Amount_of_Ingredients', 'Units', 'Note'])
+            clean_df = pd.DataFrame(result, columns=['Session_ID', 'Ingredients', ' Amount_of_Ingredients', 'Units', 'Note'])
+            clean_df.drop('Session_ID', axis=1, inplace=True)
             st.dataframe(clean_df)
 
             # delete and update recipt table
