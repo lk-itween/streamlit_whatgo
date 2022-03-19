@@ -20,7 +20,7 @@ This app shows the main food's caloris and you can create your own low-caloris r
 
 # ---------------------------------#
 
-
+## 这里增加一个session_id获取
 # @st.cache
 def get_session_id():
     ctx = get_script_run_ctx()
@@ -147,12 +147,15 @@ def main():
         note = st.text_area('Note')
         # add item in the table
         if st.button("Add Ingredient"):
+            # 确保每次开合网页的session_id获取到的数据不同，在表结构里增加一列session_id
+            # 项目中有关数据库操作的都添加了session_id参数传入
             add_data(user_session_id, ingredient, amount, units, note)
             st.success("Added ::{} ::To List".format(ingredient))
 
         # view recipt table and delete/edit table
         with st.expander("View and Edit Recipe table"):
             st.subheader('view Recipe table')
+            # 
             result = view_all_data(user_session_id)
             clean_df = pd.DataFrame(result, columns=['Session_ID', 'Ingredients', ' Amount_of_Ingredients', 'Units', 'Note'])
             clean_df.drop('Session_ID', axis=1, inplace=True)
@@ -160,12 +163,15 @@ def main():
 
             # delete and update recipt table
             st.subheader('Delete and Upadate ingrredient in table')
+            # 
             ingredients_list = [i[0] for i in view_all_ingredients_data(user_session_id)]
             delete_ingredients = st.selectbox('Select ingredent to delete', ingredients_list)
             if st.button("Delete selected ingredient"):
+                # 
                 delete_data(user_session_id, delete_ingredients)
                 st.warning("Deleted: '{}'".format(delete_ingredients))
             if st.button('Update Recipe table'):
+                # 
                 result = view_all_data(user_session_id)
 
         # gererate qr code for recipe
