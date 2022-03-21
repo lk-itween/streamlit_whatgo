@@ -23,6 +23,7 @@ This app shows the main food's caloris and you can create your own low-caloris r
 ## 这里增加一个session_id获取
 # @st.cache
 def get_session_id():
+    # 导入get_script_run_ctx模块
     ctx = get_script_run_ctx()
     if ctx is None:
         raise Exception("Failed to get the thread context")
