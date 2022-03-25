@@ -117,7 +117,9 @@ if st.session_state.login_successfully and employee_create:
         with st.expander("Position Chart"):
             position_df = result['Position'].value_counts().reset_index()  # .to_frame()
             #                 st.dataframe(position_df)
-
+            if position_df.empty:
+                st.info('Empty DataFrame.')
+                st.stop()
             p1 = px.pie(position_df, names='index', values='Position')
             st.plotly_chart(p1, use_container_width=True)
 
