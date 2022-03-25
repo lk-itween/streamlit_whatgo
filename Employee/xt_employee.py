@@ -1,4 +1,4 @@
-﻿import hashlib
+import hashlib
 import pandas as pd
 import smtplib as s
 # Data Viz Pkgs
@@ -10,49 +10,74 @@ from xt_employee_db import *
 def make_hashed(password):
     return hashlib.sha256(str.encode(password)).hexdigest()
 
-
+st.set_page_config(initial_sidebar_state='expanded')
 st.title('Employee table App')
 st.markdown("""
 You can create and edit your employee table, and **send email** to employee in this app!""")
 
-
+# 登录界面设置
+# 设置读取用户数据库为缓存数据，减少检索数据库的次数
 @st.cache
 def user_table_init():
     create_user_table()
 
+# 将登录状态设置成缓存状态，通过判断登录状态显示主页面
+if 'login_successfully' not in st.session_state:
+    st.session_state.login_successfully = False
 
 user_table_init()
 username = st.sidebar.text_input("User Name")
 password = st.sidebar.text_input("Password", type='password')
-# login_key = st.button("Login/Signup")
 
+# 登录键设置，登录，注册，登出
+sidecol1, sidecol2, sidecol3 = st.sidebar.columns(3)
+with sidecol1:
+    login_key = st.button('Log In')
+
+with sidecol2:
+    signup_key = st.button('Sign Up')
+
+# 用户名及密码校验
 if all([password, username]):
     hashed_pwd = make_hashed(password)
-    result = verify_pwd(username, hashed_pwd)
-    if result:
-        login_successfully = True
-        employee_table_name = f'employee_table_{username}'
-        st.sidebar.success(f"Logged in as {username}.")
-    elif result is None:
-        employee_table_name = add_userdata(username, hashed_pwd)
-        login_successfully = True
-        st.sidebar.success(f'Successfully registered {username}!')
+    if login_key:
+        result = verify_pwd(username, hashed_pwd)
+        if result:
+            st.session_state.login_successfully = True
+            employee_table_name = f'employee_table_{username}'
+            st.sidebar.success(f"Logged in as {username}.")
+        else:
+            st.sidebar.warning("Incorrect Username/Password !")
+    elif signup_key:
+        result = verify_pwd(username, hashed_pwd)
+        if result is None:
+            employee_table_name = add_userdata(username, hashed_pwd)
+            st.session_state.login_successfully = True
+            st.sidebar.success(f'Successfully registered {username}!')
+        else:
+            st.sidebar.info('User name already exists, please login.')
+            st.stop()
     else:
-        login_successfully = False
-        st.sidebar.warning("Incorrect Username/Password !")
+        if st.session_state.login_successfully:
+            employee_table_name = f'employee_table_{username}'
+        else:
+            st.stop()
 else:
-    login_successfully = False
-    st.sidebar.warning("The user name/password is empty. Please enter the password!")
+    st.stop()
+########
 
-
+# 获取用户设置的子表信息
 def view_all_employee(table_name):
     data = view_all_data(table_name)
     data = pd.DataFrame(data, columns=['Employee_Name', 'Position', 'Email_Address', 'Entry_date'])
     st.dataframe(data)
     return data
 
-
-if login_successfully and employee_table_name.startswith('employee_table'):
+# 主页面设置
+if st.session_state.login_successfully and employee_table_name.startswith('employee_table'):
+    with sidecol3:
+        signout_key = st.button('Sign Out')
+        st.session_state.login_successfully = False
     menu = ["Add Employee Info", "Update Info", "Delete Info", "Send Email"]
     choice = st.sidebar.selectbox("Selected Activity", menu)
     position_level = ["Senior", "Middle", "Junior"]
