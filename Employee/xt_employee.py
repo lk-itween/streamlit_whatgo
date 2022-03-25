@@ -1,3 +1,4 @@
+import time
 import hashlib
 import pandas as pd
 import smtplib as s
@@ -26,6 +27,7 @@ if 'login_successfully' not in st.session_state:
     st.session_state.login_successfully = False
 
 user_table_init()
+employee_table_name = ''
 username = st.sidebar.text_input("User Name")
 password = st.sidebar.text_input("Password", type='password')
 
@@ -43,9 +45,9 @@ if all([password, username]):
     if login_key:
         result = verify_pwd(username, hashed_pwd)
         if result:
-            st.session_state.login_successfully = True
+            if not st.session_state.login_successfully:
+                st.sidebar.success(f"Logged in as {username}.")
             employee_table_name = f'employee_table_{username}'
-            st.sidebar.success(f"Logged in as {username}.")
         elif result is None:
             st.sidebar.warning(f'User does not exist, please register!')
         else:
@@ -54,10 +56,11 @@ if all([password, username]):
         result = verify_pwd(username, hashed_pwd)
         if result is None:
             employee_table_name = add_userdata(username, hashed_pwd)
-            st.session_state.login_successfully = True
             st.sidebar.success(f'Successfully registered {username}!')
+        elif result and st.session_state.login_successfully:
+            employee_table_name = f'employee_table_{username}'
         else:
-            st.sidebar.info('User name already exists, please login.')
+            st.sidebar.info('The user name already exists, \nbut there is a problem with the password. \nPlease log in.')
     else:
         if st.session_state.login_successfully:
             employee_table_name = f'employee_table_{username}'
@@ -66,6 +69,9 @@ if all([password, username]):
 else:
     st.stop()
 ########
+time.sleep(0.1)
+employee_create = employee_table_name.startswith('employee_table')
+st.session_state.login_successfully = employee_create
 
 # 获取用户设置的子表信息
 def view_all_employee(table_name):
@@ -75,13 +81,19 @@ def view_all_employee(table_name):
     return data
 
 # 主页面设置
-if st.session_state.login_successfully and employee_table_name.startswith('employee_table'):
+if st.session_state.login_successfully and employee_create:
     with sidecol3:
         signout_key = st.button('Sign Out')
-        st.session_state.login_successfully = False
-    menu = ["Add Employee Info", "Update Info", "Delete Info", "Send Email"]
-    choice = st.sidebar.selectbox("Selected Activity", menu)
-    position_level = ["Senior", "Middle", "Junior"]
+        if signout_key:
+            st.session_state.login_successfully = False
+            employee_table_name = ''
+            st.experimental_rerun()  # 从头开始运行
+            st.stop()
+
+    with st.container():
+        menu = ["Add Employee Info", "Update Info", "Delete Info", "Send Email"]
+        choice = st.sidebar.selectbox("Selected Activity", menu)
+        position_level = ["Senior", "Middle", "Junior"]
 
     if choice == "Add Employee Info":
         st.subheader("Add Employee Info")
@@ -103,10 +115,10 @@ if st.session_state.login_successfully and employee_table_name.startswith('emplo
             result = view_all_employee(employee_table_name)
 
         with st.expander("Position Chart"):
-            position_df = result['Position'].value_counts()  # .to_frame()
+            position_df = result['Position'].value_counts().reset_index()  # .to_frame()
             #                 st.dataframe(position_df)
 
-            p1 = px.pie(position_df)  # , names='index',values='Position')
+            p1 = px.pie(position_df, names='index', values='Position')
             st.plotly_chart(p1, use_container_width=True)
 
     if choice == "Update Info":
