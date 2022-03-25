@@ -46,6 +46,8 @@ if all([password, username]):
             st.session_state.login_successfully = True
             employee_table_name = f'employee_table_{username}'
             st.sidebar.success(f"Logged in as {username}.")
+        elif result is None:
+            st.sidebar.warning(f'User does not exist, please register!')
         else:
             st.sidebar.warning("Incorrect Username/Password !")
     elif signup_key:
@@ -56,7 +58,6 @@ if all([password, username]):
             st.sidebar.success(f'Successfully registered {username}!')
         else:
             st.sidebar.info('User name already exists, please login.')
-            st.stop()
     else:
         if st.session_state.login_successfully:
             employee_table_name = f'employee_table_{username}'
