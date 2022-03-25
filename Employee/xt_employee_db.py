@@ -1,9 +1,8 @@
 import sqlite3
-conn = sqlite3.connect('data.db',check_same_thread=False)
+conn = sqlite3.connect('employee.db', check_same_thread=False)
 c = conn.cursor()
 
 
-###############
 def create_user_table():
     c.execute('CREATE TABLE IF NOT EXISTS user_table(User_ID TEXT UNIQUE, Password TEXT);')
     conn.commit()
@@ -14,7 +13,7 @@ def create_employee_table(user_id):
     return f'employee_table_{user_id}'
     
 def select_pwd(user_id):
-    c.execute(f'SELECT Password FROM user_table WHERE User_ID={user_id};')
+    c.execute(f'SELECT Password FROM user_table WHERE User_ID="{user_id}";')
     data = c.fetchall()
     return data
 
