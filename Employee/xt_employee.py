@@ -186,7 +186,8 @@ if st.session_state.login_successfully:
             email_result = get_email(employee_table_name, selected_name)
 
             if email_result:
-                email_reciever_list = email_result[0][0]
+                email_reciever_list = email_result[0]
+                st.write(email_reciever_list)
                 st.write(selected_name, email_result[0][0])
 
         elif group_reviever == 'Send by Job Title':
