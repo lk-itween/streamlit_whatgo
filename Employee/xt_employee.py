@@ -179,13 +179,14 @@ if st.session_state.login_successfully:
         password = st.text_input('Enter User Password : ', type='password')
         group = ['Send to Employee', 'Send by Job Title']
         group_reviever = st.selectbox('Where to send :', group)
-
+        email_reciever_list = []
         if group_reviever == 'Send to Employee':
             list_of_employee = [i[0] for i in view_all_employee_info(employee_table_name)]
             selected_name = st.selectbox("Select Employee", list_of_employee, key="<uniquevalueofsomesort>")
             email_result = get_email(employee_table_name, selected_name)
 
             if email_result:
+                email_reciever_list = email_result[0][0]
                 st.write(selected_name, email_result[0][0])
 
         elif group_reviever == 'Send by Job Title':
