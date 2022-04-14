@@ -209,6 +209,7 @@ if st.session_state.login_successfully:
 
             try:
                 connection = s.SMTP_SSL('smtp.gmail.com', 465)
+                connection.ehlo()
                 # connection.starttls()
                 connection.login(email_sender, password)
                 message = 'Subject:{}\n\n{}'.format(subject, body)
