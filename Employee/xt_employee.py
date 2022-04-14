@@ -208,8 +208,8 @@ if st.session_state.login_successfully:
                 st.error('Please Fill Reciecer Email Filed')
 
             try:
-                connection = s.SMTP('smtp.gmail.com', 587)
-                connection.starttls()
+                connection = s.SMTP_SSL('smtp.gmail.com', 465)
+                # connection.starttls()
                 connection.login(email_sender, password)
                 message = 'Subject:{}\n\n{}'.format(subject, body)
                 connection.sendmail(email_sender, email_reciever_list, message)
