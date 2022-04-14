@@ -195,8 +195,8 @@ if st.session_state.login_successfully:
             email_reciever_list = [i[0] for i in view_position(employee_table_name, title_send)]
             st.write(email_reciever_list)
 
-            subject = st.text_input('Your Email Subject :')
-            body = st.text_area('Your Email')
+        subject = st.text_input('Your Email Subject :')
+        body = st.text_area('Your Email')
 
         if st.button('Send Email'):
             if not email_sender:
