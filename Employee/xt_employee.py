@@ -187,7 +187,6 @@ if st.session_state.login_successfully:
 
             if email_result:
                 email_reciever_list = list(email_result[0])
-                st.write(email_reciever_list)
                 st.write(selected_name, email_result[0][0])
 
         elif group_reviever == 'Send by Job Title':
@@ -217,6 +216,7 @@ if st.session_state.login_successfully:
                 st.success('Email Send Successfully.')
 
             except Exception as e:
+                st.error(str(e))
                 st.error(
                     'Please check your email and password, or turn on the less secure app access in your google account setting')
 
