@@ -2,6 +2,7 @@ import time
 import hashlib
 import pandas as pd
 import smtplib as s
+import ssl
 # Data Viz Pkgs
 import plotly.express as px
 import streamlit as st
@@ -208,18 +209,20 @@ if st.session_state.login_successfully:
                 st.error('Please Fill Reciecer Email Filed')
 
             try:
-                connection = s.SMTP_SSL('smtp.gmail.com', 465)
-                connection.ehlo()
-                # connection.starttls()
-                connection.login(email_sender, password)
-                message = 'Subject:{}\n\n{}'.format(subject, body)
-                connection.sendmail(email_sender, email_reciever_list, message)
-                st.success('Email Send Successfully.')
+                context = ssl.create_default_context()
+                with s.SMTP_SSL('smtp.gmail.com', 465, context=context) as server:
+                    server.ehlo()
+                    # server.starttls()
+                    server.login(email_sender, password)
+                    st.write('gmail login successfully.')
+                    message = 'Subject:{}\n\n{}'.format(subject, body)
+                    server.sendmail(email_sender, email_reciever_list, message)
+                    st.success('Email Send Successfully.')
 
             except Exception as e:
                 st.error(str(e))
                 st.error(
                     'Please check your email and password, or turn on the less secure app access in your google account setting')
 
-            finally:
-                connection.quit()
+            # finally:
+            #     server.quit()
