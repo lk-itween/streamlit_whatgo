@@ -134,6 +134,10 @@ if st.session_state.login_successfully:
 
         with st.expander("Current Data"):
             result = view_all_employee(employee_table_name)
+            
+        if result.empty:
+            st.info('Empty DataFrame.')
+            st.stop()
 
         list_of_employee = result['Employee_Name'].unique().tolist()
         selected_name = st.selectbox("Select Employee", list_of_employee)
